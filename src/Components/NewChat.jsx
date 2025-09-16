@@ -2,6 +2,7 @@
 import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import backgroundImage from "../assets/roboicon.jpg";
 import { API_BASE_URL } from "../api/auth";
 
 function NewChat() {
@@ -128,64 +129,107 @@ function NewChat() {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.heading}>Start a New Chat</h2>
+      {/* Background overlay for better text readability */}
+      <div style={styles.overlay}></div>
 
-      {/* Hidden file input */}
-      <input
-        type="file"
-        accept="application/pdf,.pdf"
-        ref={fileInputRef}
-        style={{ display: "none" }}
-        onChange={handleFileChange}
-      />
+      {/* Content wrapper */}
+      <div style={styles.contentWrapper}>
+        <h2 style={styles.heading}>Start a New Chat</h2>
 
-      {loading && (
-        <div style={{ marginTop: "0.5rem", fontSize: "0.9rem" }}>
-          Uploading… {progress}%
-        </div>
-      )}
+        {/* Hidden file input */}
+        <input
+          type="file"
+          accept="application/pdf,.pdf"
+          ref={fileInputRef}
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
 
-      <button
-        style={{
-          ...styles.button,
-          backgroundColor: loading ? "#6c757d" : "#007bff",
-          cursor: loading ? "not-allowed" : "pointer",
-        }}
-        onClick={handleButtonClick}
-        disabled={loading}
-      >
-        {loading
-          ? "Uploading..."
-          : pdfFile
-          ? "Upload and Start Chat"
-          : "Select PDF"}
-      </button>
+        {loading && (
+          <div style={styles.loadingText}>Uploading… {progress}%</div>
+        )}
+
+        <button
+          style={{
+            ...styles.button,
+            backgroundColor: loading ? "#6c757d" : "#2563eb",
+            cursor: loading ? "not-allowed" : "pointer",
+          }}
+          onClick={handleButtonClick}
+          disabled={loading}
+        >
+          {loading
+            ? "Uploading..."
+            : pdfFile
+            ? "Upload and Start Chat"
+            : "Select PDF"}
+        </button>
+      </div>
     </div>
   );
 }
 
 const styles = {
   container: {
-    padding: "2rem",
-    textAlign: "center",
+    position: "relative",
     minHeight: "100vh",
-    backgroundColor: "#f8f9fa",
+    backgroundImage: `url(${backgroundImage})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(251, 191, 36, 0.7)", // Yellow overlay with transparency
+    background:
+      "linear-gradient(135deg, rgba(251, 191, 36, 0.8) 0%, rgba(245, 158, 11, 0.8) 50%, rgba(217, 119, 6, 0.8) 100%)",
+    zIndex: 1,
+  },
+  contentWrapper: {
+    position: "relative",
+    zIndex: 2,
+    padding: "3rem",
+    textAlign: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    borderRadius: "20px",
+    boxShadow: "0 20px 40px rgba(0, 0, 0, 0.1)",
+    backdropFilter: "blur(10px)",
+    maxWidth: "500px",
+    width: "90%",
   },
   heading: {
-    fontSize: "1.8rem",
-    marginBottom: "1.5rem",
-    color: "#333",
+    fontSize: "2.5rem",
+    marginBottom: "2rem",
+    color: "#1f2937",
+    fontWeight: "700",
+    textAlign: "center",
+  },
+  loadingText: {
+    marginTop: "1rem",
+    fontSize: "1rem",
+    color: "#6b7280",
+    fontWeight: "500",
   },
   button: {
-    marginTop: "1rem",
-    padding: "0.6rem 1.2rem",
-    backgroundColor: "#007bff",
+    marginTop: "2rem",
+    padding: "1rem 2rem",
+    backgroundColor: "#2563eb",
     color: "#fff",
     border: "none",
-    borderRadius: "8px",
-    fontSize: "1rem",
+    borderRadius: "12px",
+    fontSize: "1.1rem",
+    fontWeight: "600",
     cursor: "pointer",
-    transition: "background-color 0.3s ease",
+    transition: "all 0.3s ease",
+    boxShadow: "0 4px 15px rgba(37, 99, 235, 0.3)",
+    minWidth: "200px",
   },
 };
 

@@ -3,6 +3,16 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
+import {
+  Send,
+  Bot,
+  User,
+  MessageCircle,
+  AlertCircle,
+  Wifi,
+  WifiOff,
+} from "lucide-react";
+
 import { API_BASE_URL, WEBSOCKET_URL } from "../api/auth";
 
 const ChatPage = () => {
@@ -163,7 +173,6 @@ const ChatPage = () => {
     };
   }, [sessionId, loading, connectWebSocket]);
 
-
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
     if (chatboxRef.current) {
@@ -224,144 +233,178 @@ const ChatPage = () => {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <span className="ml-3 text-gray-600">Loading chat history...</span>
+      <div className="min-h-screen bg-gradient-to-br from-yellow-300 to-yellow-500 flex items-center justify-center p-6">
+        <div className="bg-white rounded-2xl p-8 shadow-xl border border-yellow-200 text-center">
+          <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+          </div>
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">
+            Loading Chat
+          </h3>
+          <p className="text-gray-600">Preparing your conversation...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 h-screen flex flex-col">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-center text-gray-800 mb-2">
-          Chat with: {pdfName}
-        </h1>
-
-        {/* Connection Status */}
-        <div className="flex justify-center items-center space-x-2">
-          <div
-            className={`w-3 h-3 rounded-full ${
-              wsConnected ? "bg-green-500" : "bg-red-500"
-            }`}
-          ></div>
-          <span
-            className={`text-sm ${
-              wsConnected ? "text-green-600" : "text-red-600"
-            }`}
-          >
-            {wsConnected ? "Connected" : "Disconnected"}
-          </span>
-        </div>
-      </div>
-
-      {/* Error Display */}
-      {error && (
-        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-          <div className="flex items-center">
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                clipRule="evenodd"
-              />
-            </svg>
-            {error}
-          </div>
-        </div>
-      )}
-
-      {/* Chat Messages */}
-      <div
-        ref={chatboxRef}
-        className="flex-1 border border-gray-300 rounded-lg p-4 bg-gray-50 overflow-y-auto mb-4 shadow-inner"
-      >
-        {messages.length === 0 ? (
-          <div className="flex items-center justify-center h-full text-gray-500">
-            <div className="text-center">
-              <svg
-                className="w-12 h-12 mx-auto mb-4 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                />
-              </svg>
-              <p>No messages yet. Start the conversation!</p>
+    <div className="min-h-screen bg-gradient-to-br from-yellow-300 to-yellow-500 p-4">
+      <div className="max-w-4xl mx-auto h-screen flex flex-col">
+        {/* Header */}
+        <div className="bg-white rounded-2xl p-6 mb-4 shadow-xl border border-yellow-200">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
+                <MessageCircle size={24} className="text-white" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-800">
+                  {pdfName || "PDF Chat"}
+                </h1>
+                <p className="text-sm text-gray-600">
+                  AI-powered document conversation
+                </p>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`max-w-full ${
-                  msg.role === "user" ? "ml-auto" : "mr-auto"
+
+            {/* Connection Status */}
+            <div className="flex items-center space-x-2">
+              {wsConnected ? (
+                <Wifi size={20} className="text-green-600" />
+              ) : (
+                <WifiOff size={20} className="text-red-600" />
+              )}
+              <span
+                className={`text-sm font-medium ${
+                  wsConnected ? "text-green-600" : "text-red-600"
                 }`}
               >
-                <div
-                  className={`p-3 rounded-lg break-words ${
-                    msg.role === "user"
-                      ? "bg-blue-600 text-white rounded-br-sm max-w-xs ml-auto"
-                      : "bg-white text-gray-800 rounded-bl-sm shadow-sm border border-gray-200"
-                  }`}
-                >
-                  <div className="flex items-start space-x-2">
-                    <strong className="text-sm font-semibold">
-                      {msg.role === "user" ? "You" : "AI"}:
-                    </strong>
-                  </div>
-                  <div className="mt-1">
-                    {msg.role === "assistant" ? (
-                      <div className="prose prose-sm max-w-none">
-                        <ReactMarkdown>{msg.content}</ReactMarkdown>
-                      </div>
-                    ) : (
-                      <span>{msg.content}</span>
-                    )}
-                  </div>
-                </div>
+                {wsConnected ? "Connected" : "Disconnected"}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Error Display */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-4 shadow-lg">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                <AlertCircle size={16} className="text-red-600" />
               </div>
-            ))}
+              <div>
+                <p className="text-red-800 font-medium">Connection Issue</p>
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            </div>
           </div>
         )}
-      </div>
 
-      {/* Input Area */}
-      <div className="flex space-x-3">
-        <input
-          type="text"
-          placeholder="Type your question..."
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          disabled={!wsConnected}
-          className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
-        />
-        <button
-          onClick={sendMessage}
-          disabled={!input.trim() || !wsConnected}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors duration-200"
-        >
-          Send
-        </button>
+        {/* Chat Messages */}
+        <div className="flex-1 bg-white rounded-2xl shadow-xl border border-yellow-200 overflow-hidden mb-4">
+          <div
+            ref={chatboxRef}
+            className="h-full overflow-y-auto p-6 bg-gradient-to-b from-gray-50 to-white"
+          >
+            {messages.length === 0 ? (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <div className="w-20 h-20 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <MessageCircle size={32} className="text-gray-800" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                    Start Your Conversation
+                  </h3>
+                  <p className="text-gray-600">
+                    Ask any question about your PDF document
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-6">
+                {messages.map((msg, i) => (
+                  <div
+                    key={i}
+                    className={`flex ${
+                      msg.role === "user" ? "justify-end" : "justify-start"
+                    }`}
+                  >
+                    <div
+                      className={`max-w-3xl flex ${
+                        msg.role === "user" ? "flex-row-reverse" : "flex-row"
+                      } items-start space-x-3`}
+                    >
+                      {/* Avatar */}
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
+                          msg.role === "user"
+                            ? "bg-gradient-to-r from-blue-600 to-blue-700 ml-3"
+                            : "bg-gradient-to-r from-yellow-400 to-yellow-500 mr-3"
+                        }`}
+                      >
+                        {msg.role === "user" ? (
+                          <User size={20} className="text-white" />
+                        ) : (
+                          <Bot size={20} className="text-gray-800" />
+                        )}
+                      </div>
+
+                      {/* Message Content */}
+                      <div
+                        className={`p-4 rounded-2xl shadow-sm ${
+                          msg.role === "user"
+                            ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-tr-md"
+                            : "bg-white text-gray-800 border border-gray-200 rounded-tl-md"
+                        }`}
+                      >
+                        <div className="mb-1">
+                          <span className="text-xs font-semibold opacity-75">
+                            {msg.role === "user" ? "You" : "AI Assistant"}
+                          </span>
+                        </div>
+                        <div className="leading-relaxed">
+                          {msg.role === "assistant" ? (
+                            <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-700 prose-strong:text-gray-800 prose-code:text-blue-600 prose-code:bg-blue-50 prose-code:px-1 prose-code:rounded">
+                              <ReactMarkdown>{msg.content}</ReactMarkdown>
+                            </div>
+                          ) : (
+                            <span>{msg.content}</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Input Area */}
+        <div className="bg-white rounded-2xl p-4 shadow-xl border border-yellow-200">
+          <div className="flex space-x-3">
+            <input
+              type="text"
+              placeholder="Ask anything about your PDF..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyPress={handleKeyPress}
+              disabled={!wsConnected}
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed transition-colors bg-gray-50 focus:bg-white"
+            />
+            <button
+              onClick={sendMessage}
+              disabled={!input.trim() || !wsConnected}
+              className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all transform hover:scale-105 shadow-lg flex items-center space-x-2"
+            >
+              <Send size={18} />
+              <span className="hidden sm:inline">Send</span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 export default ChatPage;
-
-

@@ -34,7 +34,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-lg border-b border-gray-200">
+    <header className="sticky top-0 z-50 bg-yellow-400 shadow-lg border-b border-yellow-500">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -53,13 +53,15 @@ const Header = () => {
               <div className="flex items-center space-x-4">
                 {/* User Info */}
                 {storedEmail && (
-                  <div className="flex items-center space-x-2 text-gray-700">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <div className="flex items-center space-x-2 text-gray-800">
+                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md">
                       <span className="text-sm font-semibold text-blue-600">
                         {storedEmail?.charAt(0).toUpperCase()}
                       </span>
                     </div>
-                    <span className="text-sm font-medium">{storedEmail}</span>
+                    <span className="text-sm font-medium text-gray-800">
+                      {storedEmail}
+                    </span>
                   </div>
                 )}
 
@@ -67,7 +69,7 @@ const Header = () => {
                 <button
                   onClick={handleLogout}
                   disabled={isLoggingOut}
-                  className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 disabled:bg-red-300 disabled:cursor-not-allowed transition-colors duration-200"
+                  className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-yellow-400 disabled:bg-blue-300 disabled:cursor-not-allowed transition-colors duration-200 shadow-md"
                 >
                   {isLoggingOut ? (
                     <>
@@ -116,23 +118,23 @@ const Header = () => {
               <div className="flex items-center space-x-4">
                 <Link
                   to="/login"
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 ${
                     isActivePath("/login")
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                      ? "bg-white text-blue-600 shadow-md"
+                      : "text-blue-600 hover:text-blue-700 hover:bg-yellow-300 border border-blue-600"
                   }`}
                 >
                   Login
                 </Link>
                 <Link
                   to="/signup"
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 shadow-md ${
                     isActivePath("/signup")
                       ? "bg-blue-700 text-white"
                       : "bg-blue-600 text-white hover:bg-blue-700"
-                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+                  } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-yellow-400`}
                 >
-                  Sign Up
+                  Get Started
                 </Link>
               </div>
             )}
@@ -142,7 +144,7 @@ const Header = () => {
           <div className="md:hidden">
             <button
               onClick={toggleMobileMenu}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
             >
               <svg
                 className={`${showMobileMenu ? "hidden" : "block"} h-6 w-6`}
@@ -176,19 +178,21 @@ const Header = () => {
 
         {/* Mobile Menu */}
         <div className={`${showMobileMenu ? "block" : "hidden"} md:hidden`}>
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-gray-50 border-t border-gray-200">
+          <div className="px-2 pt-2 pb-3 space-y-1 bg-yellow-300 border-t border-yellow-500 rounded-b-lg">
             {isAuthenticated ? (
               <>
                 {/* User Info Mobile */}
                 {storedEmail && (
-                  <div className="flex items-center space-x-3 px-3 py-2 text-gray-700">
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                  <div className="flex items-center space-x-3 px-3 py-2 text-gray-800">
+                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
                       <span className="text-lg font-semibold text-blue-600">
                         {storedEmail?.charAt(0).toUpperCase()}
                       </span>
                     </div>
                     <div>
-                      <div className="font-medium">{storedEmail}</div>
+                      <div className="font-medium text-gray-800">
+                        {storedEmail}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -196,7 +200,7 @@ const Header = () => {
                 <button
                   onClick={handleLogout}
                   disabled={isLoggingOut}
-                  className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:text-red-700 hover:bg-red-50 disabled:text-red-300 disabled:cursor-not-allowed transition-colors duration-200"
+                  className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-blue-600 hover:text-blue-700 hover:bg-yellow-200 disabled:text-blue-300 disabled:cursor-not-allowed transition-colors duration-200"
                 >
                   {isLoggingOut ? "Logging out..." : "Logout"}
                 </button>
@@ -208,8 +212,8 @@ const Header = () => {
                   onClick={() => setShowMobileMenu(false)}
                   className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
                     isActivePath("/login")
-                      ? "bg-blue-100 text-blue-700"
-                      : "text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                      ? "bg-white text-blue-600 shadow-md"
+                      : "text-blue-600 hover:text-blue-700 hover:bg-yellow-200"
                   }`}
                 >
                   Login
@@ -219,11 +223,11 @@ const Header = () => {
                   onClick={() => setShowMobileMenu(false)}
                   className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
                     isActivePath("/signup")
-                      ? "bg-blue-700 text-white"
-                      : "bg-blue-600 text-white hover:bg-blue-700"
+                      ? "bg-blue-700 text-white shadow-md"
+                      : "bg-blue-600 text-white hover:bg-blue-700 shadow-md"
                   }`}
                 >
-                  Sign Up
+                  Get Started
                 </Link>
               </>
             )}
