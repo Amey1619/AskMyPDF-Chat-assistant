@@ -16,7 +16,6 @@ const request = async (method, url, data = null) => {
     return response.data; // return only data for convenience
   } catch (error) {
     // normalize error response
-    console.log("Amey loggs error:",error);
     throw error.response?.data || { message: "Something went wrong" };
   }
 };

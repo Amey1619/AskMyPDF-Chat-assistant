@@ -30,8 +30,6 @@ const ChatPage = () => {
         }
         const sessionData = JSON.parse(sessionDataStr);
 
-        console.log("Found session in localStorage:", sessionData);
-
         setPdfId(sessionData.pdf_id);
         setPdfHash(sessionData.pdf_hash);
         setPdfName(sessionData.pdf_name);
@@ -61,8 +59,6 @@ const ChatPage = () => {
         withCredentials: true,
         timeout: 10000,
       });
-
-      console.log("Fetched chat history:", response);
       const chatHistory = response.data?.data?.chat_history || [];
       setMessages(chatHistory);
     } catch (err) {
@@ -167,14 +163,6 @@ const ChatPage = () => {
     };
   }, [sessionId, loading, connectWebSocket]);
 
-  useEffect(() => {
-    console.log("AMey loggs follwing data: ", {
-      sessionId: sessionId,
-      pdfHash: pdfHash,
-      pdfName: pdfName,
-      pdfId: pdfId,
-    });
-  }, [sessionId]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {

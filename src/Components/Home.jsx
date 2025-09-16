@@ -29,7 +29,6 @@ function Home() {
 
   const validSessions =
     chatSessions?.filter((session) => session.pdfId && session.pdf?.hash) || [];
-  console.log("Amey loggs valid: ", validSessions);
   return (
     <div style={styles.container}>
       <header style={styles.header}>

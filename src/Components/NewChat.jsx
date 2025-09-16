@@ -92,7 +92,6 @@ function NewChat() {
         pdf_hash,
         pdf_name,
       } = sessionResponse?.data || {};
-      console.log(sessionResponse);
 
       if (!session_id) throw new Error("Session not created");
 
